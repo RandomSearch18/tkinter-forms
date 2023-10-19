@@ -1,4 +1,4 @@
-from tkinter import Tk, StringVar, IntVar
+from tkinter import Tk, StringVar, IntVar, Text, END
 from tkinter.ttk import Label, Frame, Button, Entry, Spinbox, Radiobutton, Checkbutton
 
 window = Tk()
@@ -42,11 +42,11 @@ def draw_politics_input():
     label = Label(main_frame, text="Political position:")
     label.grid(row=starting_row, column=0)
 
-    political_position_var = IntVar()
+    political_position_var = StringVar()
     for i, option in enumerate(["Left-wing", "Right-wing"]):
         radio_button_widget = Radiobutton(main_frame,
                                           text=option,
-                                          value=i,
+                                          value=option,
                                           variable=political_position_var)
         radio_button_widget.grid(row=starting_row + i, column=1, columnspan=1)
 
@@ -72,7 +72,22 @@ def draw_hobbies_input():
 
 
 def on_submit():
-    print(name.get())
+    included_hobbies = []
+    for hobby, is_checked in hobbies.items():
+        if is_checked.get():
+            included_hobbies.append(hobby)
+
+    hobbies_string = ", ".join(included_hobbies)
+
+    output = f"""
+Name: {name.get()}
+Age: {age.get()}
+Gender: {gender.get()}
+Political position: {politics.get()}
+Hobbies: {hobbies_string}
+    """
+
+    output_widget.replace("0.0", END, output.strip())
 
 
 name = draw_name_input()
@@ -82,7 +97,10 @@ politics = draw_politics_input()
 hobbies = draw_hobbies_input()
 
 submit_button = Button(main_frame, command=on_submit, text="Submit")
-submit_button.grid(row=10, column=0)
+submit_button.grid(row=10, column=0, columnspan=2)
+
+output_widget = Text(main_frame, wrap="word", width=40, height=10)
+output_widget.grid(row=11, column=0, columnspan=2)
 
 # Label(main_frame, text="Hello World!").grid(column=0, row=0)
 # Button(main_frame, text="Quit", command=window.destroy).grid(column=1, row=0)
