@@ -1,11 +1,5 @@
 from tkinter import Tk, StringVar, IntVar, Text, END
-from tkinter.ttk import Label, Frame, Button, Entry, Spinbox, Radiobutton, Checkbutton
-
-window = Tk()
-window.title("Tkinter questionnaire")
-
-main_frame = Frame(window, padding=10)
-main_frame.grid()
+from tkinter.ttk import Label, Frame, Button, Entry, Spinbox, Radiobutton, Checkbutton, Style
 
 
 def draw_name_input():
@@ -85,10 +79,23 @@ Age: {age.get()}
 Gender: {gender.get()}
 Political position: {politics.get()}
 Hobbies: {hobbies_string}
-    """
+    """.strip()
 
-    output_widget.replace("0.0", END, output.strip())
+    output_widget.replace("0.0", END, output)
 
+    with open("questionnaire_results.txt", "w", encoding="utf-8") as file:
+        file.write(output)
+
+
+window = Tk()
+window.title("Tkinter questionnaire")
+
+main_frame = Frame(window, padding=10)
+main_frame.grid()
+
+# Use the more modern Clam theme for tk widgets
+style = Style()
+style.theme_use("clam")
 
 name = draw_name_input()
 age = draw_age_input()
